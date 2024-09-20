@@ -73,17 +73,13 @@ else
 fi
 step=$((step + 1))
 
-# 设置防火墙
+# 关闭防火墙
 if has_run "setup_firewall"; then
-    echo "步骤[$step]: 防火墙已设置，跳过。"
+    echo "步骤[$step]: 防火墙已关闭，跳过。"
 else
-    progress $step $total_steps "正在设置防火墙..."
-    retry "ufw enable &&
-    ufw status &&
-    ufw allow proto tcp from any to any port 22 &&
-    ufw allow proto tcp from any to any port 6443 &&
-    ufw allow proto tcp from any to any port 10250" || exit 1
-    echo "防火墙规则已应用。"
+    progress $step $total_steps "正在关闭防火墙..."
+    retry "ufw disable" || exit 1
+    echo "防火墙已关闭。"
     mark_as_run "setup_firewall"
 fi
 step=$((step + 1))
