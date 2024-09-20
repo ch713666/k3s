@@ -83,8 +83,6 @@ install_k3s() {
 # 分步安装菜单
 step_install() {
     while true; do
-        check_status  # 检查是否已执行过
-
         echo "请选择分步安装项："
         echo "1. 系统配置"
         echo "2. 安装Tailscale"
