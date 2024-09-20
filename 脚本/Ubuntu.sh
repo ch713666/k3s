@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # 定义状态文件
-status_file="/var/log/script_status.log"
+status_file="$HOME/script_status.log"
 
 # 定义一个简单的进度函数
 progress() {
@@ -13,9 +13,9 @@ retry() {
     local retries=3
     local count=0
     local delay=5 # 等待5秒再重试
-    local command=$1
+    local command="$1"
 
-    until $command; do
+    until eval "$command"; do
         count=$((count + 1))
         if [[ $count -ge $retries ]]; then
             echo "尝试 $retries 次后，任务失败。"
@@ -38,32 +38,36 @@ mark_as_run() {
     echo "$1" >> "$status_file"
 }
 
-# 总步骤数
-total_steps=6
-step=1
-
 # 确保状态文件存在
 touch "$status_file"
 
 # 获取公网IP地址
 public_ip=$(curl -s ifconfig.me)
+if [[ -z "$public_ip" ]]; then
+    echo "无法获取公网IP，退出脚本。"
+    exit 1
+fi
+
+# 总步骤数
+total_steps=6
+step=1
 
 # 检查并设置计算机名
 if has_run "set_hostname"; then
     echo "步骤[$step]: 计算机名已设置，跳过。"
 else
     progress $step $total_steps "正在检测公网IP并设置计算机名..."
-    retry "if [[ $public_ip == '1.94.57.193' ]]; then
-        hostnamectl set-hostname hw-cn-master-01.3idp.com
-        echo '计算机名已更改为: hw-cn-master-01.3idp.com (IP: $public_ip)'
-    elif [[ $public_ip == '117.72.66.130' ]]; then
-        hostnamectl set-hostname jd-cn-master-02.3idp.com
-        echo '计算机名已更改为: jd-cn-master-02.3idp.com (IP: $public_ip)'
-    elif [[ $public_ip == '14.103.92.254' ]]; then
-        hostnamectl set-hostname hs-cn-master-03.3idp.com
-        echo '计算机名已更改为: hs-cn-master-03.3idp.com (IP: $public_ip)'
+    retry "if [[ \$public_ip == '1.94.57.193' ]]; then
+        hostnamectl set-hostname hw-cn-master-01.3idp.com &&
+        echo '计算机名已更改为: hw-cn-master-01.3idp.com (IP: \$public_ip)'
+    elif [[ \$public_ip == '117.72.66.130' ]]; then
+        hostnamectl set-hostname jd-cn-master-02.3idp.com &&
+        echo '计算机名已更改为: jd-cn-master-02.3idp.com (IP: \$public_ip)'
+    elif [[ \$public_ip == '14.103.92.254' ]]; then
+        hostnamectl set-hostname hs-cn-master-03.3idp.com &&
+        echo '计算机名已更改为: hs-cn-master-03.3idp.com (IP: \$public_ip)'
     else
-        echo '未找到匹配的公网IP，跳过主机名更改。当前IP: $public_ip'
+        echo '未找到匹配的公网IP，跳过主机名更改。当前IP: \$public_ip'
     fi" || exit 1
     mark_as_run "set_hostname"
 fi
