@@ -57,13 +57,13 @@ install_k3s() {
     case $k3s_choice in
         1)
             echo "开始安装第一台Master节点..."
-            curl -O https://github.com/ch713666/k3s/blob/main/%E8%84%9A%E6%9C%AC/k3s-install-master.sh
+            curl -O https://raw.githubusercontent.com/ch713666/k3s/refs/heads/main/%E8%84%9A%E6%9C%AC/k3s-install-0-script.sh
             chmod +x k3s-install-master.sh
             ./k3s-install-master.sh
             ;;
         2)
             echo "开始安装Master节点..."
-            curl -O https://github.com/ch713666/k3s/blob/main/%E8%84%9A%E6%9C%AC/k3s-install-master.sh
+            curl -O https://raw.githubusercontent.com/ch713666/k3s/refs/heads/main/%E8%84%9A%E6%9C%AC/k3s-install-1-script.sh
             chmod +x k3s-install-master.sh
             ./k3s-install-master.sh
             ;;
