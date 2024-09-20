@@ -22,7 +22,7 @@ auto_install() {
 # 定义函数：系统配置
 configure_system() {
     echo "开始下载并执行系统配置脚本..."
-    curl -O https://github.com/ch713666/k3s/blob/main/%E8%84%9A%E6%9C%AC/Ubuntu.sh
+    curl -O https://raw.githubusercontent.com/ch713666/k3s/refs/heads/main/%E8%84%9A%E6%9C%AC/Ubuntu.sh
     chmod +x Ubuntu.sh
     ./Ubuntu.sh
     touch $STATUS_FILE  # 创建状态文件
@@ -31,7 +31,7 @@ configure_system() {
 # 定义函数：安装Tailscale
 install_tailscale() {
     echo "开始下载并执行Tailscale安装脚本..."
-    curl -O https://github.com/ch713666/k3s/blob/main/%E8%84%9A%E6%9C%AC/tailscale.sh
+    curl -O https://raw.githubusercontent.com/ch713666/k3s/refs/heads/main/%E8%84%9A%E6%9C%AC/tailscale.sh
     chmod +x tailscale.sh
     ./tailscale.sh
     touch $STATUS_FILE  # 创建状态文件
@@ -40,7 +40,7 @@ install_tailscale() {
 # 定义函数：安装Docker
 install_docker() {
     echo "开始下载并执行Docker安装脚本..."
-    curl -O https://github.com/ch713666/k3s/blob/main/%E8%84%9A%E6%9C%AC/Docker.sh
+    curl -O https://raw.githubusercontent.com/ch713666/k3s/refs/heads/main/%E8%84%9A%E6%9C%AC/Docker.sh
     chmod +x Docker.sh
     ./Docker.sh
     touch $STATUS_FILE  # 创建状态文件
