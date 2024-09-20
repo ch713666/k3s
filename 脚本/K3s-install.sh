@@ -58,18 +58,18 @@ install_k3s() {
         1)
             echo "开始安装第一台Master节点..."
             curl -O https://raw.githubusercontent.com/ch713666/k3s/refs/heads/main/%E8%84%9A%E6%9C%AC/k3s-install-0-script.sh
-            chmod +x k3s-install-master.sh
-            ./k3s-install-master.sh
+            chmod +x k3s-install-0-script.sh
+            ./k3s-install-0-script.sh
             ;;
         2)
             echo "开始安装Master节点..."
             curl -O https://raw.githubusercontent.com/ch713666/k3s/refs/heads/main/%E8%84%9A%E6%9C%AC/k3s-install-1-script.sh
-            chmod +x k3s-install-master.sh
-            ./k3s-install-master.sh
+            chmod +x k3s-install-1-script.sh
+            ./k3s-install-1-script.sh
             ;;
         3)
             echo "开始安装Agent节点..."
-            curl -O https://github.com/ch713666/k3s/blob/main/%E8%84%9A%E6%9C%AC/k3s-install-agent.sh
+            curl -O https://raw.githubusercontent.com/ch713666/k3s/refs/heads/main/%E8%84%9A%E6%9C%AC/k3s-install-agent.sh
             chmod +x k3s-install-agent.sh
             ./k3s-install-agent.sh
             ;;
@@ -82,49 +82,62 @@ install_k3s() {
 
 # 分步安装菜单
 step_install() {
-    check_status  # 检查是否已执行过
+    while true; do
+        check_status  # 检查是否已执行过
 
-    echo "请选择分步安装项："
-    echo "1. 系统配置"
-    echo "2. 安装Tailscale"
-    echo "3. 安装Docker"
-    echo "4. 安装K3s"
-    read -p "请输入选择的数字(1-4): " step_choice
+        echo "请选择分步安装项："
+        echo "1. 系统配置"
+        echo "2. 安装Tailscale"
+        echo "3. 安装Docker"
+        echo "4. 安装K3s"
+        echo "5. 返回主菜单"
+        read -p "请输入选择的数字(1-5): " step_choice
 
-    case $step_choice in
-        1)
-            configure_system
-            ;;
-        2)
-            install_tailscale
-            ;;
-        3)
-            install_docker
-            ;;
-        4)
-            install_k3s
-            ;;
-        *)
-            echo "无效的选择，请输入1-4之间的数字。"
-            ;;
-    esac
+        case $step_choice in
+            1)
+                configure_system
+                ;;
+            2)
+                install_tailscale
+                ;;
+            3)
+                install_docker
+                ;;
+            4)
+                install_k3s
+                ;;
+            5)
+                return  # 返回主菜单
+                ;;
+            *)
+                echo "无效的选择，请输入1-5之间的数字。"
+                ;;
+        esac
+    done
 }
 
 # 主菜单
-echo "请选择安装模式："
-echo "1. 自动安装"
-echo "2. 分步安装"
-read -p "请输入选择的数字(1或2): " choice
+while true; do
+    echo "请选择安装模式："
+    echo "1. 自动安装"
+    echo "2. 分步安装"
+    echo "3. 退出"
+    read -p "请输入选择的数字(1-3): " choice
 
-case $choice in
-    1)
-        check_status  # 检查是否已执行过
-        auto_install
-        ;;
-    2)
-        step_install
-        ;;
-    *)
-        echo "无效的选择，请输入1或2。"
-        ;;
-esac
+    case $choice in
+        1)
+            check_status  # 检查是否已执行过
+            auto_install
+            ;;
+        2)
+            step_install
+            ;;
+        3)
+            echo "退出程序。"
+            exit 0
+            ;;
+        *)
+            echo "无效的选择，请输入1-3。"
+            ;;
+    esac
+done
